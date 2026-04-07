@@ -9,6 +9,8 @@ class SayaMusicTrack
     public string title;
     public SayaMusicTrack(string title)
     {
+        if (title == null) throw new ArgumentNullException(nameof(title));
+        if (title.Length == 0) throw new ArgumentException("Judul harus dibawah 200,", nameof(title));
         this.title = title;
         this.PlayCount = 0;
         Random rnd = new Random();
@@ -16,7 +18,15 @@ class SayaMusicTrack
     }
     public void IncreasePlayCount(int count)
     {
-        this.PlayCount += count;
+        if (count > 25000000) throw new ArgumentOutOfRangeException(nameof(count));
+        try
+        {
+            checked { this.PlayCount += count; }
+        }
+        catch(OverflowException)
+        {
+            Console.WriteLine("Maksimal");
+        }
     }
     public void PrintTrackDetails()
     {
@@ -38,6 +48,10 @@ class SayaMusicUser
 
     public SayaMusicUser(string username)
     {
+        if (username == null) 
+            throw new ArgumentException("Usename tidak boleh Null");
+        if (username.Length >200) 
+            throw new ArgumentException("Nama harus dibawah 200,");
         this.Username = username;
         this.uploadedTracks = new List<SayaMusicTrack>();   
         Random rnd = new Random();
